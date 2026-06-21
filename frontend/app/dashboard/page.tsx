@@ -101,7 +101,8 @@ export default function Dashboard() {
       const formData = new FormData()
       formData.append('file', image)
 
-      const res = await fetch('http://localhost:8000/analyze', {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const res = await fetch(`${apiBaseUrl}/analyze`, {
         method: 'POST',
         body: formData,
       })
@@ -115,7 +116,8 @@ export default function Dashboard() {
       setResult(data)
     } catch (err: any) {
       console.error("Backend error:", err)
-      setError(err.message || "Failed to connect to the DefectVision API server. Please verify the backend is running at http://localhost:8000.")
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      setError(err.message || `Failed to connect to the DefectVision API server. Please verify the backend is running at ${apiBaseUrl}.`)
     } finally {
       setAnalyzing(false)
     }
