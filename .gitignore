@@ -14,13 +14,6 @@ frontend/.next/
 frontend/out/
 frontend/build/
 
-# Local Environment Variables
-.env
-.env.local
-.env.*.local
-backend/.env
-frontend/.env.local
-
 # OS files
 .DS_Store
 Thumbs.db
