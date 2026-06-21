@@ -1,0 +1,26 @@
+# Virtual Environments & Python Cache
+backend/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Node & Frontend dependencies/build
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Local Environment Variables
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
