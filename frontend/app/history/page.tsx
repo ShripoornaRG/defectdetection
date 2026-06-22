@@ -2,8 +2,17 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 
+interface HistoryRecord {
+  id: string;
+  severity: string;
+  cause: string;
+  forecast: string;
+  image_url: string;
+  created_at: string;
+}
+
 export default function History() {
-  const [history, setHistory] = useState<any[]>([])
+  const [history, setHistory] = useState<HistoryRecord[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

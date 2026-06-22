@@ -114,10 +114,11 @@ export default function Dashboard() {
 
       const data: AnalysisResult = await res.json()
       setResult(data)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Backend error:", err)
       const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      setError(err.message || `Failed to connect to the DefectVision API server. Please verify the backend is running at ${apiBaseUrl}.`)
+      const message = err instanceof Error ? err.message : `Failed to connect to the DefectVision API server. Please verify the backend is running at ${apiBaseUrl}.`
+      setError(message)
     } finally {
       setAnalyzing(false)
     }

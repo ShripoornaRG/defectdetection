@@ -13,7 +13,7 @@ export default function CameraCapture({ onCapture }: { onCapture: (file: File) =
         video: true
       })
       setStream(mediaStream)
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setError('Could not access camera. Please check permissions or upload a file instead.')
     }
