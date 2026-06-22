@@ -153,7 +153,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', width: '100%', minHeight: '90vh' }}>
+    <div style={{ padding: '2rem 3.5rem', width: '100%', maxWidth: '100%', minHeight: '90vh' }}>
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', borderBottom: '1px solid var(--border)', paddingBottom: '1.5rem' }}>
         <div>
@@ -235,179 +235,181 @@ export default function Dashboard() {
       )}
 
       {/* Main Workspace (when image selected) */}
-      {preview && (
-        <div className="dashboard-grid animate-fade-in">
-          
-          {/* Left Column: Visualizers */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            
-            {/* Dual Preview Box */}
-            <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary)' }}>SURFACE VISUALIZATION</h3>
-                {!result && !analyzing && (
-                  <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.95rem' }} onClick={handleAnalyze}>
-                    Analyze Surface
-                  </button>
-                )}
-              </div>
-
-              {/* Bounding box visualizer container */}
-              <div style={{ display: 'grid', gridTemplateColumns: result ? '1fr 1fr' : '1fr', gap: '1rem', width: '100%' }}>
-                
-                {/* Uploaded Image */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#8b949e', textTransform: 'uppercase', fontWeight: 600 }}>Raw Input</div>
-                  <div className="scanner-container">
-                    {analyzing && <div className="scanner-line"></div>}
-                    <img 
-                      src={preview} 
-                      alt="Raw defect preview" 
-                      style={{ width: '100%', height: 'auto', maxHeight: '450px', objectFit: 'contain', display: 'block', opacity: analyzing ? 0.6 : 1 }} 
-                    />
-                  </div>
-                </div>
-
-                {/* YOLO Bounding Box Result */}
-                {result && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', animation: 'fadeIn 0.4s ease' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#8b949e', textTransform: 'uppercase', fontWeight: 600 }}>YOLO Detections</div>
-                    <div className="scanner-container">
-                      <img 
-                        src={result.annotated_image} 
-                        alt="YOLO defect detections" 
-                        style={{ width: '100%', height: 'auto', maxHeight: '450px', objectFit: 'contain', display: 'block' }} 
-                      />
-                    </div>
-                  </div>
-                )}
-
-              </div>
-
-              {analyzing && (
-                <div className="pulse" style={{ color: 'var(--primary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'center', padding: '1rem 0' }}>
-                  <span className="spinner" style={{ display: 'inline-block', width: '18px', height: '18px', border: '2px solid rgba(88, 166, 255, 0.2)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'scan 1s linear infinite' }}></span>
-                  YOLO Model Inference Running...
-                </div>
+      {preview && !result && (
+        <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          {/* Pre-analysis: Full-width image with analyze button */}
+          <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary)' }}>SURFACE VISUALIZATION</h3>
+              {!analyzing && (
+                <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.95rem' }} onClick={handleAnalyze}>
+                  Analyze Surface
+                </button>
               )}
             </div>
 
-            {/* If analyzing and hasn't loaded result yet, show mock skeleton or instruction */}
-            {!result && !analyzing && (
-              <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', color: '#8b949e' }}>
-                <p>Click the <strong>Analyze Surface</strong> button to initiate YOLO neural network defect detection on this surface segment.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ fontSize: '0.8rem', color: '#8b949e', textTransform: 'uppercase', fontWeight: 600 }}>Raw Input</div>
+              <div className="scanner-container">
+                {analyzing && <div className="scanner-line"></div>}
+                <img 
+                  src={preview} 
+                  alt="Raw defect preview" 
+                  style={{ width: '100%', height: 'auto', maxHeight: '500px', objectFit: 'contain', display: 'block', opacity: analyzing ? 0.6 : 1 }} 
+                />
+              </div>
+            </div>
+
+            {analyzing && (
+              <div className="pulse" style={{ color: 'var(--primary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'center', padding: '1rem 0' }}>
+                <span className="spinner" style={{ display: 'inline-block', width: '18px', height: '18px', border: '2px solid rgba(88, 166, 255, 0.2)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'scan 1s linear infinite' }}></span>
+                YOLO Model Inference Running...
               </div>
             )}
           </div>
 
-          {/* Right Column: Analytical Reports */}
-          {result && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              
-              {/* Quality & Severity Dashboard Cards */}
-              <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                
-                {/* Header Metrics */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '1.25rem' }}>
-                  <h3 style={{ fontSize: '1.35rem', fontWeight: 700 }}>INSPECTION REPORT</h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ fontSize: '0.8rem', color: '#8b949e', textTransform: 'uppercase', fontWeight: 600 }}>Severity:</span>
-                    <span className="badge" style={{ backgroundColor: 'transparent', borderColor: getSeverityColor(result.severity), color: getSeverityColor(result.severity) }}>
-                      {result.severity}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Score Indicators Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  
-                  {/* Surface Quality */}
-                  <div className="metric-card">
-                    <span className="metric-label">Surface Quality</span>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.25rem' }}>
-                      <span className={`quality-badge ${getQualityBadgeClass(result.surface_quality)}`}>
-                        {result.surface_quality}
-                      </span>
-                    </div>
-                    <span className="metric-desc" style={{ marginTop: '0.5rem' }}>
-                      {result.surface_quality === 'Excellent' && 'Perfect condition.'}
-                      {result.surface_quality === 'Good' && 'Minor surface wear.'}
-                      {result.surface_quality === 'Fair' && 'Moderate defect clusters.'}
-                      {result.surface_quality === 'Poor' && 'Significant structural defect concentration.'}
-                    </span>
-                  </div>
-
-                  {/* Adhesion Quality */}
-                  <div className="metric-card">
-                    <span className="metric-label">Est. Adhesion</span>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.25rem' }}>
-                      <span className={`quality-badge ${getQualityBadgeClass(result.adhesion_quality)}`}>
-                        {result.adhesion_quality}
-                      </span>
-                    </div>
-                    <span className="metric-desc" style={{ marginTop: '0.5rem' }}>
-                      Estimate based on surface defects.
-                    </span>
-                  </div>
-
-                </div>
-
-                {/* Warning note for Adhesion Quality */}
-                <div style={{ padding: '0.75rem 1rem', background: 'rgba(210, 153, 34, 0.05)', border: '1px solid rgba(210, 153, 34, 0.2)', borderRadius: '8px', fontSize: '0.8rem', color: '#d29922', display: 'flex', gap: '0.5rem' }}>
-                  <span>ℹ️</span>
-                  <span>{result.adhesion_quality_note}</span>
-                </div>
-
-                {/* Actionable Maintenance Recommendation */}
-                <div style={{ padding: '1.25rem', background: 'rgba(88, 166, 255, 0.07)', borderLeft: '4px solid var(--primary)', borderRadius: '0 8px 8px 0', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                  <span className="metric-label" style={{ color: 'var(--primary)' }}>Action Plan</span>
-                  <span style={{ fontSize: '1.1rem', fontWeight: 600 }}>{result.recommendation}</span>
-                </div>
-
-                {/* Detected defects list */}
-                <div>
-                  <h4 style={{ fontSize: '0.9rem', color: '#8b949e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem', fontWeight: 700 }}>
-                    Detected defect details ({result.detected_defects.length})
-                  </h4>
-
-                  {result.detected_defects.length === 0 ? (
-                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', textAlign: 'center', color: '#8b949e', border: '1px dashed var(--border)' }}>
-                      No defects identified by the YOLO model.
-                    </div>
-                  ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                      {result.detected_defects.map((defect, i) => (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', background: 'rgba(255,255,255,0.02)', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontWeight: 600, textTransform: 'capitalize' }}>
-                              {defect.type.replace('_', ' ').replace('-', ' ')}
-                            </span>
-                            <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '0.9rem' }}>
-                              {(defect.confidence * 100).toFixed(0)}% Confidence
-                            </span>
-                          </div>
-                          
-                          {/* Progress bar represent confidence */}
-                          <div style={{ width: '100%', height: '6px', background: 'var(--border)', borderRadius: '3px', overflow: 'hidden' }}>
-                            <div 
-                              style={{ 
-                                height: '100%', 
-                                width: `${defect.confidence * 100}%`, 
-                                background: 'linear-gradient(90deg, var(--primary), #8a2be2)',
-                                borderRadius: '3px' 
-                              }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-              </div>
-              
+          {!analyzing && (
+            <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', color: '#8b949e' }}>
+              <p>Click the <strong>Analyze Surface</strong> button to initiate YOLO neural network defect detection on this surface segment.</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Post-analysis: Side-by-side layout — Images LEFT, Report RIGHT */}
+      {preview && result && (
+        <div className="dashboard-grid animate-fade-in" style={{ alignItems: 'stretch' }}>
+          
+          {/* Left Column: Images (Raw + YOLO stacked) */}
+          <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%' }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary)', flexShrink: 0 }}>SURFACE VISUALIZATION</h3>
+
+            {/* Raw Input */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1, minHeight: 0 }}>
+              <div style={{ fontSize: '0.8rem', color: '#8b949e', textTransform: 'uppercase', fontWeight: 600, flexShrink: 0 }}>Raw Input</div>
+              <div className="scanner-container" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0, height: '100%' }}>
+                <img 
+                  src={preview} 
+                  alt="Raw defect preview" 
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', minHeight: 0 }} 
+                />
+              </div>
+            </div>
+
+            {/* YOLO Annotated */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', animation: 'fadeIn 0.4s ease', flex: 1, minHeight: 0 }}>
+              <div style={{ fontSize: '0.8rem', color: '#8b949e', textTransform: 'uppercase', fontWeight: 600, flexShrink: 0 }}>YOLO Detections</div>
+              <div className="scanner-container" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0, height: '100%' }}>
+                <img 
+                  src={result.annotated_image} 
+                  alt="YOLO defect detections" 
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', minHeight: 0 }} 
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Inspection Report */}
+          <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', height: '100%' }}>
+            
+            {/* Header Metrics */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '1.25rem', flexShrink: 0 }}>
+              <h3 style={{ fontSize: '1.35rem', fontWeight: 700 }}>INSPECTION REPORT</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.8rem', color: '#8b949e', textTransform: 'uppercase', fontWeight: 600 }}>Severity:</span>
+                <span className="badge" style={{ backgroundColor: 'transparent', borderColor: getSeverityColor(result.severity), color: getSeverityColor(result.severity) }}>
+                  {result.severity}
+                </span>
+              </div>
+            </div>
+
+            {/* Score Indicators Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', flexShrink: 0 }}>
+              
+              {/* Surface Quality */}
+              <div className="metric-card">
+                <span className="metric-label">Surface Quality</span>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.25rem' }}>
+                  <span className={`quality-badge ${getQualityBadgeClass(result.surface_quality)}`}>
+                    {result.surface_quality}
+                  </span>
+                </div>
+                <span className="metric-desc" style={{ marginTop: '0.5rem' }}>
+                  {result.surface_quality === 'Excellent' && 'Perfect condition.'}
+                  {result.surface_quality === 'Good' && 'Minor surface wear.'}
+                  {result.surface_quality === 'Fair' && 'Moderate defect clusters.'}
+                  {result.surface_quality === 'Poor' && 'Significant structural defect concentration.'}
+                </span>
+              </div>
+
+              {/* Adhesion Quality */}
+              <div className="metric-card">
+                <span className="metric-label">Est. Adhesion</span>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginTop: '0.25rem' }}>
+                  <span className={`quality-badge ${getQualityBadgeClass(result.adhesion_quality)}`}>
+                    {result.adhesion_quality}
+                  </span>
+                </div>
+                <span className="metric-desc" style={{ marginTop: '0.5rem' }}>
+                  Estimate based on surface defects.
+                </span>
+              </div>
+
+            </div>
+
+            {/* Warning note for Adhesion Quality */}
+            <div style={{ padding: '0.75rem 1rem', background: 'rgba(210, 153, 34, 0.05)', border: '1px solid rgba(210, 153, 34, 0.2)', borderRadius: '8px', fontSize: '0.8rem', color: '#d29922', display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+              <span>ℹ️</span>
+              <span>{result.adhesion_quality_note}</span>
+            </div>
+
+            {/* Actionable Maintenance Recommendation */}
+            <div style={{ padding: '1rem', background: 'rgba(88, 166, 255, 0.07)', borderLeft: '4px solid var(--primary)', borderRadius: '0 8px 8px 0', display: 'flex', flexDirection: 'column', gap: '0.25rem', flexShrink: 0 }}>
+              <span className="metric-label" style={{ color: 'var(--primary)' }}>Action Plan</span>
+              <span style={{ fontSize: '1rem', fontWeight: 600 }}>{result.recommendation}</span>
+            </div>
+
+            {/* Detected defects list */}
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: 0, flex: 1 }}>
+              <h4 style={{ fontSize: '0.9rem', color: '#8b949e', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem', fontWeight: 700, flexShrink: 0 }}>
+                Detected defect details ({result.detected_defects.length})
+              </h4>
+
+              {result.detected_defects.length === 0 ? (
+                <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', textAlign: 'center', color: '#8b949e', border: '1px dashed var(--border)', flexShrink: 0 }}>
+                  No defects identified by the YOLO model.
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', overflowY: 'auto', flex: 1, minHeight: 0, paddingRight: '0.5rem' }} className="custom-scrollbar">
+                  {result.detected_defects.map((defect, i) => (
+                    <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', background: 'rgba(255,255,255,0.02)', padding: '0.6rem 1rem', borderRadius: '8px', border: '1px solid var(--border)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: 600, textTransform: 'capitalize', fontSize: '0.95rem' }}>
+                          {defect.type.replace('_', ' ').replace('-', ' ')}
+                        </span>
+                        <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '0.85rem' }}>
+                          {(defect.confidence * 100).toFixed(0)}%
+                        </span>
+                      </div>
+                      
+                      {/* Progress bar represent confidence */}
+                      <div style={{ width: '100%', height: '5px', background: 'var(--border)', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div 
+                          style={{ 
+                            height: '100%', 
+                            width: `${defect.confidence * 100}%`, 
+                            background: 'linear-gradient(90deg, var(--primary), #8a2be2)',
+                            borderRadius: '3px' 
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
 
         </div>
       )}
