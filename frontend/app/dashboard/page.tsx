@@ -1,6 +1,7 @@
 "use client"
 import { useState, useRef } from 'react'
 import CameraCapture from '../../components/CameraCapture'
+import { useAuth } from '../../context/AuthContext'
 
 interface Defect {
   type: string;
@@ -18,6 +19,7 @@ interface AnalysisResult {
 }
 
 export default function Dashboard() {
+  const { user, loading } = useAuth()
   const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
@@ -151,6 +153,16 @@ export default function Dashboard() {
       default: return 'quality-good';
     }
   }
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <div className="spinner" style={{ width: '40px', height: '40px', border: '3px solid rgba(88, 166, 255, 0.2)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'scan 1s linear infinite' }}></div>
+      </div>
+    )
+  }
+
+  if (!user) return null
 
   return (
     <div style={{ padding: '2rem 3.5rem', width: '100%', maxWidth: '100%', minHeight: '90vh' }}>

@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { useAuth } from '../../context/AuthContext'
 
 interface HistoryRecord {
   id: string;
@@ -12,6 +13,7 @@ interface HistoryRecord {
 }
 
 export default function History() {
+  const { user, loading: authLoading } = useAuth()
   const [history, setHistory] = useState<HistoryRecord[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -35,6 +37,16 @@ export default function History() {
       setLoading(false)
     }
   }
+
+  if (authLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <div className="spinner" style={{ width: '40px', height: '40px', border: '3px solid rgba(88, 166, 255, 0.2)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'scan 1s linear infinite' }}></div>
+      </div>
+    )
+  }
+
+  if (!user) return null
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
