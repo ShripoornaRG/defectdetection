@@ -11,18 +11,7 @@ export default function Header() {
   const isActive = (path: string) => pathname === path
 
   return (
-    <header style={{ 
-      padding: '1rem 3.5rem', 
-      borderBottom: '1px solid var(--border)', 
-      background: 'rgba(13, 17, 23, 0.8)', 
-      backdropFilter: 'blur(12px)', 
-      position: 'sticky', 
-      top: 0, 
-      zIndex: 50, 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center' 
-    }}>
+    <header className="app-header">
       {/* Logo */}
       <Link href={user ? '/home' : '/'} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'inherit' }}>
         <div style={{ fontSize: '1.4rem', fontWeight: 850, letterSpacing: '-0.03em' }}>
@@ -31,7 +20,7 @@ export default function Header() {
       </Link>
 
       {/* Navigation */}
-      <nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+      <nav className="app-nav">
         {user ? (
           <>
             <Link 
@@ -69,7 +58,7 @@ export default function Header() {
             </Link>
 
             {/* User Badge / Sign Out */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: '0.5rem', borderLeft: '1px solid var(--border)', paddingLeft: '1.5rem' }}>
+            <div className="user-auth-section">
               <span style={{ fontSize: '0.85rem', color: '#8b949e', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 👤 {user.email}
               </span>

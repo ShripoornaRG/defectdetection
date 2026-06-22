@@ -44,13 +44,26 @@ async def analyze_endpoint(file: UploadFile = File(...)):
     if not file.filename:
         raise HTTPException(status_code=400, detail="No file uploaded")
 
-    # 2. Error Handling: Invalid image formats (Accept JPG, PNG, and JPEG files)
+    # 2. Error Handling: Accept any image file by MIME type or common image extension
     filename_lower = file.filename.lower()
-    valid_extensions = (".jpg", ".jpeg", ".png")
-    if not filename_lower.endswith(valid_extensions):
+    content_type = file.content_type or ""
+    # Accept if MIME type is image/*, OR if filename has a known image extension
+    common_img_exts = (
+        ".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tiff", ".tif",
+        ".heic", ".heif", ".gif", ".svg", ".ico", ".avif", ".jfif",
+        ".pjpeg", ".pjp", ".raw", ".dng", ".cr2", ".nef", ".orf",
+        ".arw", ".rw2", ".pef", ".srw", ".tga", ".exr", ".hdr",
+        ".psd", ".xcf", ".pbm", ".pgm", ".ppm", ".xbm", ".xpm",
+    )
+    is_image_mime = content_type.startswith("image/")
+    is_image_ext = any(filename_lower.endswith(ext) for ext in common_img_exts)
+    if not is_image_mime and not is_image_ext:
         raise HTTPException(
-            status_code=400, 
-            detail="Invalid image format. Only JPG, JPEG, and PNG files are accepted."
+            status_code=400,
+            detail=(
+                f"Unsupported file type '{file.filename}'. "
+                "Please upload any standard image file (JPG, PNG, WEBP, BMP, TIFF, HEIC, RAW, etc.)."
+            )
         )
 
     try:

@@ -69,12 +69,12 @@ export default function Dashboard() {
 
   const validateAndSetFile = (file: File) => {
     const filenameLower = file.name.toLowerCase()
-    const validExtensions = ['.jpg', '.jpeg', '.png']
+    const validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.bmp', '.tiff', '.tif', '.heic', '.heif', '.gif', '.svg', '.ico']
     const isValidExtension = validExtensions.some(ext => filenameLower.endsWith(ext))
     const isValidMime = file.type.startsWith('image/')
 
     if (!isValidExtension && !isValidMime) {
-      setError("Invalid file format. Only JPG, JPEG, and PNG files are accepted.")
+      setError("Invalid file format. Supported formats include: JPG, JPEG, PNG, WEBP, BMP, TIFF, HEIC, GIF, SVG.")
       return
     }
 
@@ -217,7 +217,7 @@ export default function Dashboard() {
                 <div style={{ fontSize: '3rem' }}>📥</div>
                 <div>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.25rem' }}>Drag & Drop defect image here</h3>
-                  <p style={{ color: '#8b949e', fontSize: '0.9rem' }}>Supports JPG, JPEG, and PNG formats</p>
+                  <p style={{ color: '#8b949e', fontSize: '0.9rem' }}>Supports all standard image formats (JPG, PNG, WEBP, BMP, etc.)</p>
                 </div>
                 <button className="btn-primary" style={{ pointerEvents: 'none', padding: '8px 18px', fontSize: '0.9rem' }}>
                   Browse Files
@@ -226,7 +226,7 @@ export default function Dashboard() {
                   type="file" 
                   ref={fileInputRef}
                   onChange={handleFileChange}
-                  accept=".jpg,.jpeg,.png"
+                  accept="image/*, .jpg, .jpeg, .png, .webp, .bmp, .tiff, .tif, .heic, .heif, .gif, .svg, .ico"
                   style={{ display: 'none' }}
                 />
               </div>
